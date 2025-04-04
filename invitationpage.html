@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation Slider</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        
+        body { overflow: hidden; background-color: black; }
+
+        .slider { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+
+        .slide { width: 100%; height: 100%; position: absolute; top: 0; left: 100%; opacity: 0;
+                display: flex; align-items: center; justify-content: center; text-align: center; color: white;
+                transition: all 1.5s ease-in-out; background-size: cover; background-position: center; flex-direction: column; }
+
+        .active { left: 0; opacity: 1; }
+
+        .video-container { position: relative; }
+        
+        #contentText { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; background-color: rgba(0, 0, 0, 0.5); padding: 20px; border-radius: 10px; }
+
+        .slide img { max-width: 80%; height: auto; border-radius: 10px; margin-top: 20px; position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity 1s ease-in-out; }
+
+        .slide img.visible { opacity: 1; }
+
+        .thank-you { font-size: 2.5em; color: white; text-align: center; padding: 20px; background-color: black; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .thank-you video { max-width: 90%; max-height: 90%; }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .slide img {
+                max-width: 90%;
+            }
+            .thank-you video {
+              max-width: 100%;
+              max-height: 100%;
+            }
+            #contentText {
+              padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slider">
+    <div class="slide active">
+        <div class="content" id="contentText"><h1>Welcome</h1><p>Enjoy the visual experience.</p></div>
+        <div class="video-container">
+            <video id="introVideo" playsinline muted>
+                <source src="./ganesh_video2.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="post-video-text" id="postVideoText"><h1>Wishing You Happiness & Love</h1><p>Let's Celebrate Together!</p></div>
+    </div>
+
+    <div class="slide zoom-in" style="background-image: url('./card_1.jpg');">
+        <div class="content"><h1>Wedding Invitation</h1><p>Join us for the grand celebration.</p></div>
+        <img src="./letter_p.jpg" class="slide-image" id="letter_p">
+        <img src="./letter_k.png" class="slide-image" id="letter_k">
+        <img src="./p_k_logo.jpeg" class="slide-image" id="p_k_logo">
+    </div>
+
+    <div class="slide slide-up" style="background-image: url('./sangeth_bg.jpg');">
+        <div class="content"><h1>Sangeet Celebration</h1><p>Let's Dance!</p></div>
+        <img src="./p_img.png" class="slide-image" id="p_imgg1">
+        <img src="./k_img2.png" class="slide-image" id="k_imgg1">
+    </div>
+
+    <div class="slide fade-in" style="background-image: url('./mehandi_bg.jpg');">
+        <div class="content"><h1>Mehandi Ceremony</h1><p>Auspicious Beginnings</p></div>
+        <img src="./k_mehendi.jpg" class="slide-image" id="k_imgg2">
+        <img src="./p_img2.png" class="slide-image" id="p_imgg2">
+    </div>
+
+    <div class="slide fade-in" style="background-image: url('./kesari-haldi.jpeg');">
+        <div class="content"><h1>Haldi Ceremony</h1><p>Auspicious Beginnings</p></div>
+        <img src="./k_img3.png" class="slide-image" id="k_imgg3">
+        <img src="./p_img3.png" class="slide-image" id="p_imgg3">
+    </div>
+
+    <div class="slide zoom-in" style="background-image: url('./weddingcard_template.jpg');">
+        <div class="content"><h1>Wedding Details</h1><p>Join us for the grand celebration.</p></div>
+        <img src="./ghibili_PK.png" class="slide-image" id="p_k_logo1">
+    </div>
+</div>
+
+<audio id="weddingAudio" autoplay src="./Prema Velluva_trimmed.mp3"></audio>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const slides = document.querySelectorAll(".slide");
+        const video = document.getElementById("introVideo");
+        const videoContainer = document.querySelector(".video-container");
+        const postVideoText = document.getElementById("postVideoText");
+        const contentText = document.getElementById("contentText");
+        const audio = document.getElementById("weddingAudio");
+        let currentIndex = 0;
+
+        function showNextSlide() {
+            console.log("Current Slide Index:", currentIndex);
+            console.log("Slide Class:", slides[currentIndex]?.classList);
+
+            slides[currentIndex].classList.remove("active");
+            currentIndex++;
+
+            if (currentIndex < slides.length) {
+                slides[currentIndex].classList.add("active");
+                showSlideContent(currentIndex);
+            } else {
+                setTimeout(() => {
+                    document.body.innerHTML = `<div class="thank-you"> <video id="saveTheDateVideo" playsinline muted autoplay loop> <source src="./save_the_template.mp4" type="video/mp4"> </video> </div>`;
+                    audio.pause();
+                    audio.currentTime = 0;
+                }, 4000);
+            }
+        }
+
+        function showSlideContent(index) {
+            const slide = slides[index];
+            slide.querySelector('.content').style.display = 'block';
+
+            setTimeout(() => {
+                slide.querySelector('.content').style.display = 'none';
+
+                if (index === 1) handleImages(["letter_p", "letter_k", "p_k_logo"], 1500);
+                else if (index === 2) handleImages(["p_imgg1", "k_imgg1"], 1500);
+                else if (index === 3) handleImages(["p_imgg2", "k_imgg2"], 1500);
+                else if (index === 4) handleImages(["k_imgg3", "p_imgg3"], 1500);
+                else if (index === 5) handleImages(["p_k_logo1"]);
+                else setTimeout(showNextSlide, 2000);
+            }, 2000);
+        }
+
+        function handleImages(imageIds, delay = 500) {
+            let currentImageIndex = 0;
+            function displayNextImage() {
+                if (currentImageIndex < imageIds.length) {
+                    const currentId = imageIds[currentImageIndex];
+                    document.getElementById(currentId).classList.add("visible");
+
+                    if (currentImageIndex > 0) {
+                        const previousId = imageIds[currentImageIndex - 1];
+                        document.getElementById(previousId).classList.remove("visible");
+                    }
+
+                    currentImageIndex++;
+                    setTimeout(displayNextImage, delay);
+                } else {
+                    setTimeout(showNextSlide, 2000);
+                }
+            }
+            displayNextImage();
+        }
+
+        document.querySelectorAll(".slide img").forEach(img => {
+            img.onload = () => console.log(`Loaded: ${img.src}`);
+            img.onerror = () => console.error(`Error loading image: ${img.src}`);
+        });
+
+        setTimeout(() => {
+            videoContainer.style.display = "block";
+            video.play();
+            contentText.style.display = "none";
+            setTimeout(() => {
+                video.pause();
+                videoContainer.style.display = "none";
+                postVideoText.style.display = "block";
+                audio.play().catch(error => {
+                    console.error("Audio autoplay was prevented:", error);
+                });
+                setTimeout(() => {
+                    postVideoText.style.display = "none";
+                    showNextSlide();
+                }, 2000);
+            }, 7000);
+        }, 3000);
+    });
+</script>
+
+</body>
+</html>
