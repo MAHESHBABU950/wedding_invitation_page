@@ -1,2 +1,2 @@
 # wedding_invitation_page
-An webpage using of giving invitation page using html,css and js and gibhli images
+An webpage using of giving wedding invitation using html,css and js and gibhli images
